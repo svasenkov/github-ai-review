@@ -5,6 +5,13 @@ import ai.review.dto.ReviewResponse;
 import ai.review.github.GitHubClient;
 import ai.review.ollama.OllamaClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
@@ -20,7 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -31,6 +37,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebMvc
+@Epic("Integration Tests")
+@Feature("Review Controller")
 class ReviewControllerMockedIntegrationTest {
 
     @LocalServerPort
@@ -51,6 +59,10 @@ class ReviewControllerMockedIntegrationTest {
     private String baseUrl;
 
     @Test
+    @DisplayName("Should generate review and post to GitHub successfully")
+    @Story("Review Generation")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Tests the complete flow of generating a code review and posting it to GitHub PR")
     void testGenerateReviewWithPosting() throws Exception {
         // Given
         baseUrl = "http://localhost:" + port + "/api/review";
@@ -93,6 +105,10 @@ class ReviewControllerMockedIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should generate review without posting to GitHub")
+    @Story("Review Generation")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Tests generating a code review without posting it to GitHub")
     void testGenerateReviewWithoutPosting() throws Exception {
         // Given
         baseUrl = "http://localhost:" + port + "/api/review";
@@ -121,6 +137,10 @@ class ReviewControllerMockedIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should return error for invalid repository format")
+    @Story("Input Validation")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Tests validation of repository format in review request")
     void testGenerateReviewWithInvalidRepository() throws Exception {
         // Given
         baseUrl = "http://localhost:" + port + "/api/review";
@@ -139,6 +159,10 @@ class ReviewControllerMockedIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should return error for invalid PR number")
+    @Story("Input Validation")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Tests validation of PR number in review request")
     void testGenerateReviewWithInvalidPrNumber() throws Exception {
         // Given
         baseUrl = "http://localhost:" + port + "/api/review";
@@ -157,6 +181,10 @@ class ReviewControllerMockedIntegrationTest {
     }
 
     @Test
+    @DisplayName("Health endpoint should return correct response")
+    @Story("Health Check")
+    @Severity(SeverityLevel.MINOR)
+    @Description("Tests the health endpoint accessibility")
     void testHealthEndpoint() throws Exception {
         // Given
         baseUrl = "http://localhost:" + port + "/api/review";
@@ -173,6 +201,10 @@ class ReviewControllerMockedIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should return error for empty request body")
+    @Story("Input Validation")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Tests handling of empty request body")
     void testGenerateReviewWithEmptyRequestBody() throws Exception {
         // Given
         baseUrl = "http://localhost:" + port + "/api/review";
@@ -189,6 +221,10 @@ class ReviewControllerMockedIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should return error for missing required fields")
+    @Story("Input Validation")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Tests validation of required fields in review request")
     void testGenerateReviewWithMissingFields() throws Exception {
         // Given
         baseUrl = "http://localhost:" + port + "/api/review";
