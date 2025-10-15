@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group = 'ai.review'
@@ -34,6 +35,19 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    
+    // Testcontainers for integration testing
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
+    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+    
+    // WireMock for mocking HTTP services
+    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+    
+    // Test utilities
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers:3.2.0'
+    
+    // Allure reporting
+    testImplementation 'io.qameta.allure:allure-junit5:2.24.0'
 }
 
 // Spring Boot will handle the main class
@@ -44,6 +58,19 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty 'allure.results.directory', 'build/allure-results'
+}
+
+allure {
+    version = '2.24.0'
+    adapter {
+        aspectjWeaver.set(true)
+        frameworks {
+            junit5 {
+                adapterVersion.set('2.24.0')
+            }
+        }
+    }
 }
 
 

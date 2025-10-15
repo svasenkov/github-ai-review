@@ -3,7 +3,14 @@ package ai.review.service;
 import ai.review.exception.ValidationException;
 import ai.review.github.GitHubClient;
 import ai.review.ollama.OllamaClient;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -13,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@Epic("Unit Tests")
+@Feature("Review Service")
 class ReviewServiceTest {
     
     private ReviewService reviewService;
@@ -29,6 +38,10 @@ class ReviewServiceTest {
     }
     
     @Test
+    @DisplayName("Should throw validation exception for invalid repository format")
+    @Story("Input Validation")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Tests validation of repository format in service layer")
     void generateReview_WithInvalidRepository_ShouldThrowValidationException() {
         // Given
         String invalidRepo = "invalid-repo-format";
@@ -127,6 +140,10 @@ class ReviewServiceTest {
     }
     
     @Test
+    @DisplayName("Should use QA automation template for review generation")
+    @Story("Template Selection")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Tests that the correct template is used for QA automation reviews")
     void generateReview_WithQaAutomationTemplate_ShouldUseCorrectTemplate() {
         // Given
         String validRepo = "owner/repo";
