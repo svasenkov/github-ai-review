@@ -1,0 +1,22 @@
+name: Build and Run Docker Compose
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-run:
+    runs-on: metrics
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build and run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_SECRET }}
+          OLLAMA_API_URL: ${{ vars.OLLAMA_API_URL }}
+          OLLAMA_API_TOKEN: ${{ secrets.OLLAMA_API_TOKEN_SECRET }}
+          OLLAMA_MODEL: ${{ vars.OLLAMA_MODEL }}
+        run: |
+          docker-compose --file docker-compose.yml up --build -d
